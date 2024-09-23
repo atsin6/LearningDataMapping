@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Getter
@@ -26,9 +26,20 @@ public class EmployeeEntity {
     private DepartmentEntity managedDepartment;
 
     @ManyToOne
-    @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
+//    @JoinColumn(name = "worker_department_id", referencedColumnName = "id")
+    @JoinTable(name = "worker_department_mapping")
     @JsonIgnore
     private DepartmentEntity workerDepartment;
+
+    @ManyToMany
+    @JoinTable(name = "freelancer_Department_mapping",
+            joinColumns = @JoinColumn(name="employee_id"),
+            inverseJoinColumns = @JoinColumn(name="department_id")
+    )
+    @JsonIgnore
+    private Set<DepartmentEntity> freelanceDepartments;
+
+
 
     @Override
     public boolean equals(Object o) {
